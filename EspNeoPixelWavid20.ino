@@ -49,7 +49,7 @@ void setup() {
 
   // Optional functionnalities of EspMQTTClient : 
   client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
-  client.enableHTTPWebUpdater(); // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. These can be overrited with enableHTTPWebUpdater("user", "password").
+  // client.enableHTTPWebUpdater(); // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. These can be overrited with enableHTTPWebUpdater("user", "password").
   client.enableLastWillMessage("iot/test", "accident");  // You can activate the retain flag by setting the third parameter to true
 
   cuadro.begin();
