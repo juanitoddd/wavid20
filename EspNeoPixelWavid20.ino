@@ -16,18 +16,18 @@ static const uint8_t D10  = 1;
 
 int pixels = 167;
 
-String scene = "accident";
+String scene = "takeoff";
 
 Adafruit_NeoPixel cuadro = Adafruit_NeoPixel(pixels, D4, NEO_GRB + NEO_KHZ800);
 
 EspMQTTClient client(
-  "UPC3699094",
-  "ewbc7eUyzjs8",
-  "192.168.0.165",  // Home Assistant MQTT Broker server ip
-  "mqttuser",
-  "mqttpass",
-  "ESP-Led",     // Client name that uniquely identify your device
-  1883              // The MQTT port, default to 1883. this line can be omitted
+  "juanddd",
+  "manonegra",
+  "192.168.0.111",  // Home Assistant MQTT Broker server ip
+  "juanddd",
+  "manonegra",
+  "ESP_Led_1"     // Client name that uniquely identify your device
+          // The MQTT port, default to 1883. this line can be omitted
 );
 
 void onConnectionEstablished(){
@@ -36,7 +36,7 @@ void onConnectionEstablished(){
   // Subscribe to "mytopic/test" and display received message to Serial
   client.subscribe("iot/test", [](const String & payload) {
     
-    scene = payload;
+    // scene = payload;
     Serial.println(payload);
     
   });
@@ -48,13 +48,23 @@ void setup() {
   Serial.begin(115200);
 
   // Optional functionnalities of EspMQTTClient : 
+  
   client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
+  
   // client.enableHTTPWebUpdater(); // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. These can be overrited with enableHTTPWebUpdater("user", "password").
-  client.enableLastWillMessage("iot/test", "accident");  // You can activate the retain flag by setting the third parameter to true
+  // client.enableLastWillMessage("iot/test", "accident");  // You can activate the retain flag by setting the third parameter to true
 
+  client.setMqttReconnectionAttemptDelay(2000);
+
+  client.setWifiReconnectionAttemptDelay(5000);
+
+  client.enableMQTTPersistence();
+  
   cuadro.begin();
   cuadro.show();
-  
+
+  delay(500);
+  Serial.println("Set-up Finish");
 }
 
 // the loop function runs over and over again forever
@@ -62,6 +72,7 @@ void loop() {
 
   client.loop();
 
+  /*
   if(scene == "initial") {
       
     scene_initial();
@@ -83,6 +94,7 @@ void loop() {
     scene_landing();
     
   }
+  */
 
 }
 
