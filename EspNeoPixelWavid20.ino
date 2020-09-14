@@ -16,7 +16,7 @@ static const uint8_t D10  = 1;
 
 int pixels = 167;
 
-String scene = "takeoff";
+String scene = "blinkSlow";
 
 Adafruit_NeoPixel cuadro = Adafruit_NeoPixel(pixels, D4, NEO_GRB + NEO_KHZ800);
 
@@ -26,7 +26,7 @@ EspMQTTClient client(
   "192.168.0.111",  // Home Assistant MQTT Broker server ip
   "juanddd",
   "manonegra",
-  "ESP_Led_1"     // Client name that uniquely identify your device
+  "ESP_Led_2"     // Client name that uniquely identify your device
           // The MQTT port, default to 1883. this line can be omitted
 );
 
@@ -36,7 +36,7 @@ void onConnectionEstablished(){
   // Subscribe to "mytopic/test" and display received message to Serial
   client.subscribe("iot/test", [](const String & payload) {
     
-    // scene = payload;
+    scene = payload;
     Serial.println(payload);
     
   });
@@ -44,6 +44,8 @@ void onConnectionEstablished(){
 }
  
 void setup() {
+
+  pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
 
   Serial.begin(115200);
 
@@ -72,7 +74,6 @@ void loop() {
 
   client.loop();
 
-  /*
   if(scene == "initial") {
       
     scene_initial();
@@ -93,9 +94,33 @@ void loop() {
 
     scene_landing();
     
-  }
-  */
+  } else if(scene == "blinkSlow") {
 
+    blinkSlow();
+    
+  } else if(scene == "blinkFast") {
+
+    blinkFast();
+    
+  }
+}
+
+void blinkFast() {
+  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  // but actually the LED is on; this is because
+  // it is active low on the ESP-01)
+  delay(100);                      // Wait for a second
+  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  delay(200);                      // Wait for two seconds (to demonstrate the active low LED)
+}
+
+void blinkSlow() {
+  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  // but actually the LED is on; this is because
+  // it is active low on the ESP-01)
+  delay(1000);                      // Wait for a second
+  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  delay(2000);                      // Wait for two seconds (to demonstrate the active low LED)
 }
 
 void scene_accident() {
