@@ -26,14 +26,16 @@ EspMQTTClient client(
   "192.168.0.111",  // Home Assistant MQTT Broker server ip
   "juanddd",
   "manonegra",
-  "ESP_Led_2"     // Client name that uniquely identify your device
+  "ESP_Led_4"     // Client name that uniquely identify your device
           // The MQTT port, default to 1883. this line can be omitted
 );
 
 void onConnectionEstablished(){
 
   Serial.println("onConnectionEstablished");
-  // Subscribe to "mytopic/test" and display received message to Serial
+
+  // Change the topics
+  
   client.subscribe("iot/test", [](const String & payload) {
     
     scene = payload;
@@ -65,7 +67,7 @@ void setup() {
   cuadro.begin();
   cuadro.show();
 
-  delay(500);
+  // delay(500);
   Serial.println("Set-up Finish");
 }
 
@@ -101,6 +103,10 @@ void loop() {
   } else if(scene == "blinkFast") {
 
     blinkFast();
+    
+  } else if(scene == "off") {
+
+    off();
     
   }
 }
@@ -206,6 +212,16 @@ void scene_initial() {
   cuadro.setBrightness(50);
   for(int i = 0; i < pixels; i++) {
     cuadro.setPixelColor(i,255,255,255);
+    cuadro.show();
+  };
+  
+}
+
+void off() {
+
+  cuadro.setBrightness(0);
+  for(int i = 0; i < pixels; i++) {
+    cuadro.setPixelColor(i,0,0,0);
     cuadro.show();
   };
   
